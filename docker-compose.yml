@@ -1,16 +1,6 @@
 version: "3.8"
 
 services:
-  django:
-    build: .
-    container_name: django
-    command: python manage.py runserver 0.0.0.0:8000
-    volumes:
-      - .:/usr/src/app
-    ports:
-      - "8000:8000"
-    depends_on:
-      - pgdb
   pgdb:
     image: postgres
     container_name: pgdb
@@ -18,7 +8,27 @@ services:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    # volumes:
+    #   - pgdata:/var/lib/postgresql/data/
+  django:
+    build: .
+    container_name: django
+    environment:
+      - DJANGO_SUPERUSER_PASSWORD=admin
+      - DJANGO_SUPERUSER_USERNAME=admin
+    entrypoint: ["sh", "-c"]
+    command:
+      - |
+        ./wait-for pgdb:5432 -t 10 -- python manage.py makemigrations
+        ./wait-for pgdb:5432 -t 10 -- python manage.py migrate --noinput
+        python manage.py seed
+        python manage.py createsuperuser --noinput --email admin@admin.com
+        python manage.py runserver 0.0.0.0:8000
     volumes:
-      - pgdata:/var/lib/postgresql/data/
-volumes:
-  pgdata:
+      - .:/usr/src/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - pgdb
+# volumes:
+#   pgdata:
