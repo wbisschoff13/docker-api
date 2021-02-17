@@ -1,5 +1,5 @@
 from django.db import models
-
+import numpy as np
 # Create your models here.
 
 
@@ -16,5 +16,17 @@ class Pokemon(models.Model):
     sp_defense = models.IntegerField(blank=True, null=True)
     speed = models.IntegerField(blank=True, null=True)
 
+    @property
+    def average_stat(self):
+        try:
+            avg = int(np.mean([self.hp, self.attack, self.defense,
+                               self.sp_attack, self.sp_defense, self.speed]))
+        except:
+            avg = 0
+        return avg
+
     def __str__(self):
         return self.name
+
+    class Meta:
+        ordering = ['id']

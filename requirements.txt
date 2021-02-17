@@ -1,5 +1,7 @@
 django
+djangorestframework
 psycopg2-binary
 requests
 aiohttp
 asyncio
+numpy

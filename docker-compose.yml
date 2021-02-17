@@ -23,6 +23,7 @@ services:
         ./wait-for pgdb:5432 -t 10 -- python manage.py migrate --noinput
         python manage.py seed
         python manage.py createsuperuser --noinput --email admin@admin.com
+        python manage.py test
         python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/usr/src/app
