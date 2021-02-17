@@ -2,7 +2,7 @@
 
 ## Overview
 
-Quick API made with Django, Django-Rest-Framework, PostgresQL, and Docker.
+Quick API made with Django, Django-Rest-Framework, PostgreSQL, and Docker.
 
 Collects Pokémon data from [PokéApi](pokeapi.co) on startup and saves into a local database. Django then serves as an API for this database.
 
